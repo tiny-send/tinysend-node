@@ -334,6 +334,10 @@ export interface CreateMailboxEmailParams {
 	r2_key?: string;
 }
 
+export interface UpdateMailboxEmailParams {
+	status: 'read' | 'archived';
+}
+
 export interface ListMailboxEmailsQuery {
 	direction?: string;
 	status?: string;
@@ -469,21 +473,162 @@ export interface UsageInfo {
 }
 
 // ---------------------------------------------------------------------------
-// Domain
+// Sender + site domain
 // ---------------------------------------------------------------------------
 
-export interface DomainInfo {
-	domain: string | null;
-	status: string | null;
-	sender_name: string | null;
-	sender_email: string | null;
-	dns_records: unknown;
+export interface DnsRecord {
+	type: string;
+	name: string;
+	value: string;
+	/** Whether the record is visible in DNS yet. */
+	found: boolean;
+	/** Plain-words explanation of what the record does. */
+	purpose?: string;
 }
 
-export interface SetupDomainParams {
+export interface SenderInfo {
+	type: string;
+	from_address: string;
+	status: 'default' | 'pending' | 'verified' | 'failed';
+	records: DnsRecord[];
+	/** Plain-language description of what to do next. */
+	next_step: string;
+}
+
+export interface SetSenderParams {
+	/** tinysend = default @tinysend.com, custom_domain = your own domain via DNS, gmail = coming soon. */
+	type: 'tinysend' | 'custom_domain' | 'gmail';
+	name?: string;
+	/** Local part only, the bit before the @. */
+	email?: string;
+	domain?: string;
+}
+
+export interface SiteDomainInfo {
+	domain: string | null;
+	default_url: string;
+	live_url: string | null;
+	status: 'not_configured' | 'pending' | 'active' | 'failed';
+	records: DnsRecord[];
+	next_step: string;
+}
+
+export interface SetSiteDomainParams {
+	/** Domain or subdomain you own, e.g. news.acme.com. */
 	domain: string;
-	sender_name: string;
-	sender_email: string;
+	/** Also serve www.<domain> (for naked domains). */
+	www_enabled?: boolean;
+}
+
+// ---------------------------------------------------------------------------
+// Automations
+// ---------------------------------------------------------------------------
+
+export interface Automation {
+	id: string;
+	project_id: string;
+	type: string;
+	entity_type: string;
+	entity_id: string;
+	enabled: boolean;
+	name: string | null;
+	model: string | null;
+	system_prompt: string | null;
+	tool_permissions: Record<string, string> | null;
+	schedule: string | null;
+	skills: string[] | null;
+	config: Record<string, unknown> | null;
+	allowed_domains: string[] | null;
+	created_at: string;
+	updated_at: string;
+}
+
+export interface CreateAutomationParams {
+	/** Defaults to the caller's project when omitted. */
+	project_id?: string;
+	type: string;
+	entity_type: string;
+	entity_id: string;
+	enabled?: boolean;
+	name?: string;
+	model?: string;
+	system_prompt?: string;
+	tool_permissions?: Record<string, string>;
+	schedule?: string;
+	skills?: string[];
+	config?: Record<string, unknown>;
+	allowed_domains?: string[];
+}
+
+export interface UpdateAutomationParams {
+	enabled?: boolean;
+	name?: string;
+	model?: string | null;
+	system_prompt?: string | null;
+	tool_permissions?: Record<string, string>;
+	schedule?: string | null;
+	skills?: string[];
+	config?: Record<string, unknown>;
+	allowed_domains?: string[];
+}
+
+// ---------------------------------------------------------------------------
+// Invites + waitlist
+// ---------------------------------------------------------------------------
+
+export interface ProjectInvite {
+	id: string;
+	project_id: string;
+	email: string;
+	role: string;
+	status: string;
+	source: string;
+	created_at: string;
+}
+
+export interface InviteToListParams {
+	/** Invite the next N entries by position. */
+	count?: number;
+	/** Invite these specific subscriber ids. */
+	subscribers?: string[];
+	/** Invite everyone still waiting (launch day). */
+	all?: boolean;
+}
+
+export interface InviteResult {
+	invited: number;
+}
+
+export interface JoinListParams {
+	/** Person joining by email (double opt-in). Omit to join as the authenticated agent identity. */
+	email?: string;
+	name?: string;
+	/** Referrer's referral code, to credit a referral. */
+	ref?: string;
+}
+
+export interface JoinResult {
+	status: 'created' | 'exists' | 'full' | 'invalid';
+	subscriber_id: string | null;
+	position: number | null;
+	referral_url: string | null;
+}
+
+// ---------------------------------------------------------------------------
+// Settings
+// ---------------------------------------------------------------------------
+
+export interface OverageSettings {
+	overage_enabled: boolean;
+	/** Monthly spending cap in dollars. */
+	overage_cap: number | null;
+	overage_rate: number;
+}
+
+export interface UpdateOverageParams {
+	overage_enabled: boolean;
+	/** Monthly spending cap in dollars. Minimum $0.50. Required when enabling overage. */
+	overage_cap: number | null;
 }
 
 // ---------------------------------------------------------------------------

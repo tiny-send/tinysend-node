@@ -7,7 +7,11 @@ import { Mailboxes } from './resources/mailboxes.js';
 import { Stats } from './resources/stats.js';
 import { Webhooks } from './resources/webhooks.js';
 import { Usage } from './resources/usage.js';
-import { Domains } from './resources/domains.js';
+import { Sender } from './resources/sender.js';
+import { SiteDomains } from './resources/site-domains.js';
+import { Automations } from './resources/automations.js';
+import { Invites } from './resources/invites.js';
+import { Settings } from './resources/settings.js';
 
 export class Tinysend {
 	readonly lists: Lists;
@@ -18,7 +22,11 @@ export class Tinysend {
 	readonly stats: Stats;
 	readonly webhooks: Webhooks;
 	readonly usage: Usage;
-	readonly domains: Domains;
+	readonly sender: Sender;
+	readonly siteDomains: SiteDomains;
+	readonly automations: Automations;
+	readonly invites: Invites;
+	readonly settings: Settings;
 
 	constructor(apiKey: string, options?: ClientOptions) {
 		const client = new ApiClient(apiKey, options);
@@ -30,7 +38,11 @@ export class Tinysend {
 		this.stats = new Stats(client);
 		this.webhooks = new Webhooks(client);
 		this.usage = new Usage(client);
-		this.domains = new Domains(client);
+		this.sender = new Sender(client);
+		this.siteDomains = new SiteDomains(client);
+		this.automations = new Automations(client);
+		this.invites = new Invites(client);
+		this.settings = new Settings(client);
 	}
 }
 

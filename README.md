@@ -49,7 +49,25 @@ const hook = await ts.webhooks.create({
   url: 'https://example.com/webhook',
   events: ['post.sent', 'subscriber.created'],
 });
+
+// sender domain (who emails come from)
+await ts.sender.set(list.id, { type: 'custom_domain', name: 'James', email: 'james', domain: 'acme.com' });
+await ts.sender.check(list.id); // re-check DNS
+
+// custom domain for the archive site
+await ts.siteDomains.set(list.id, { domain: 'news.acme.com' });
+
+// waitlists
+await ts.lists.join(list.id, { email: 'user@example.com' });
+await ts.lists.invite(list.id, { count: 100 });
+
+// automations, invites, usage, settings
+const automations = await ts.automations.list();
+const invites = await ts.invites.list();
+const usage = await ts.usage.get();
 ```
+
+The SDK covers the full API surface — verified against the live [openapi spec](https://api.tinysend.com/v1/openapi.json) on every release.
 
 ## Error handling
 

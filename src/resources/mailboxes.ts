@@ -10,6 +10,7 @@ import type {
 	MailboxEmailSummary,
 	MailboxEmailDetail,
 	CreateMailboxEmailParams,
+	UpdateMailboxEmailParams,
 	ListMailboxEmailsQuery,
 } from '../types.js';
 
@@ -42,6 +43,11 @@ export class MailboxEmails {
 
 	create(mailboxId: string, params: CreateMailboxEmailParams): Promise<MailboxEmailDetail> {
 		return this.client.post(`/mailboxes/${mailboxId}/emails`, params);
+	}
+
+	/** Update email status (read/archived). */
+	update(mailboxId: string, emailId: string, params: UpdateMailboxEmailParams): Promise<MailboxEmailDetail> {
+		return this.client.patch(`/mailboxes/${mailboxId}/emails/${emailId}`, params);
 	}
 }
 
