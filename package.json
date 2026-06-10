@@ -1,0 +1,45 @@
+{
+  "name": "tinysend",
+  "version": "0.1.0",
+  "description": "Official tinysend SDK — email platform API client",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "tinysend",
+    "email",
+    "newsletter",
+    "api",
+    "sdk",
+    "mailbox"
+  ],
+  "author": "System Operator LLC",
+  "license": "MIT",
+  "homepage": "https://tinysend.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tiny-send/tinysend-node"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
