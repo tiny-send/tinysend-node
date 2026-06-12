@@ -2,7 +2,7 @@
 
 Official TypeScript SDK for the [tinysend](https://tinysend.com) API. Zero dependencies, fetch-based — works in Node.js, Bun, Deno, Cloudflare Workers, and browsers.
 
-[![subscribers](https://api.tinysend.com/v1/badges/updates/subscribers.svg)](https://updates.tinysend.com)
+[![subscribers](https://updates.tinysend.com/subscribers.svg)](https://updates.tinysend.com)
 
 - website: [tinysend.com](https://tinysend.com)
 - docs: [tinysend.com/docs](https://tinysend.com/docs)
