@@ -3,12 +3,15 @@ import type { TinysendErrorBody } from './types.js';
 export class TinysendError extends Error {
 	readonly status: number;
 	readonly code: string;
+	/** Extra fields from the error body (upgrade_url, dns_records, retryable, ...). */
+	readonly extra: Record<string, unknown>;
 
-	constructor(status: number, code: string, message: string) {
+	constructor(status: number, code: string, message: string, extra: Record<string, unknown> = {}) {
 		super(message);
 		this.name = 'TinysendError';
 		this.status = status;
 		this.code = code;
+		this.extra = extra;
 	}
 }
 
@@ -28,11 +31,12 @@ export class ApiClient {
 		this._fetch = options.fetch ?? globalThis.fetch.bind(globalThis);
 	}
 
-	async request<T>(method: string, path: string, body?: unknown): Promise<T> {
+	async request<T>(method: string, path: string, body?: unknown, extraHeaders?: Record<string, string>): Promise<T> {
 		const url = `${this.baseUrl}${path}`;
 		const headers: Record<string, string> = {
 			'Authorization': `Bearer ${this.apiKey}`,
 			'Accept': 'application/json',
+			...extraHeaders,
 		};
 
 		if (body !== undefined) {
@@ -54,7 +58,8 @@ export class ApiClient {
 		if (!resp.ok) {
 			if (contentType.includes('application/json')) {
 				const err = (await resp.json()) as TinysendErrorBody;
-				throw new TinysendError(resp.status, err.error.code, err.error.message);
+				const { code, message, ...extra } = err.error;
+				throw new TinysendError(resp.status, code, message, extra);
 			}
 			throw new TinysendError(resp.status, 'unknown_error', `HTTP ${resp.status}`);
 		}
@@ -70,8 +75,8 @@ export class ApiClient {
 		return this.request<T>('GET', path);
 	}
 
-	post<T>(path: string, body?: unknown): Promise<T> {
-		return this.request<T>('POST', path, body);
+	post<T>(path: string, body?: unknown, extraHeaders?: Record<string, string>): Promise<T> {
+		return this.request<T>('POST', path, body, extraHeaders);
 	}
 
 	put<T>(path: string, body?: unknown): Promise<T> {

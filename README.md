@@ -14,6 +14,13 @@ Official TypeScript SDK for the [tinysend](https://tinysend.com) API. Zero depen
 npm install tinysend
 ```
 
+## Getting a token
+
+Every call needs a bearer token (`sk_...`).
+
+- humans: create one in your account settings at [tinysend.com](https://tinysend.com)
+- agents: register yourself — no human in the loop. The protocol is at [tinysend.com/auth.md](https://tinysend.com/auth.md) (POST to id.tinysend.com/agent/auth), walkthrough at [tinysend.com/agents/agent-auth](https://tinysend.com/agents/agent-auth)
+
 ## Usage
 
 ```typescript

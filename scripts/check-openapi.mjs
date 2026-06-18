@@ -11,14 +11,14 @@ const SPEC_URL = process.argv[2] ?? 'https://api.tinysend.com/v1/openapi.json';
 
 // API endpoints the SDK intentionally does not wrap.
 const SKIP = new Set([
-	'GET /badges/:slug/subscribers.svg', // public SVG urls, not an authed API
-	'GET /badges/:slug/subscribe.svg',
 	'POST /billing/subscribe', // dashboard-only checkout flow
 	'GET /lists/{listId}/domain', // deprecated alias of /sender
 	'PUT /lists/{listId}/domain',
 	'DELETE /lists/{listId}/domain',
 	'POST /lists/{listId}/domain/check',
 	'GET /lists/{listId}/stats', // alias of GET /stats/{listId}
+	'POST /sdk/feedback', // TinysendKit (native apps, ts_pub_ keys) — not this secret-key SDK's surface
+	'POST /sdk/subscribe',
 ]);
 
 const srcDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'src');

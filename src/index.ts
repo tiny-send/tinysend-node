@@ -4,6 +4,7 @@ import { Subscribers } from './resources/subscribers.js';
 import { Posts } from './resources/posts.js';
 import { Contacts } from './resources/contacts.js';
 import { Mailboxes } from './resources/mailboxes.js';
+import { Emails } from './resources/emails.js';
 import { Stats } from './resources/stats.js';
 import { Webhooks } from './resources/webhooks.js';
 import { Usage } from './resources/usage.js';
@@ -19,6 +20,7 @@ export class Tinysend {
 	readonly posts: Posts;
 	readonly contacts: Contacts;
 	readonly mailboxes: Mailboxes;
+	readonly emails: Emails;
 	readonly stats: Stats;
 	readonly webhooks: Webhooks;
 	readonly usage: Usage;
@@ -35,6 +37,7 @@ export class Tinysend {
 		this.posts = new Posts(client);
 		this.contacts = new Contacts(client);
 		this.mailboxes = new Mailboxes(client);
+		this.emails = new Emails(client);
 		this.stats = new Stats(client);
 		this.webhooks = new Webhooks(client);
 		this.usage = new Usage(client);

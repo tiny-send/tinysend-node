@@ -329,7 +329,11 @@ export interface MailboxEmailDetail {
 
 export interface CreateMailboxEmailParams {
 	to_address: string;
-	subject?: string;
+	subject: string;
+	/** Plain-text body. Sent via Cloudflare Email Service from the mailbox address. */
+	text_body: string;
+	/** Optional HTML body. */
+	html_body?: string;
 	in_reply_to?: string;
 	r2_key?: string;
 }
@@ -639,5 +643,40 @@ export interface TinysendErrorBody {
 	error: {
 		code: string;
 		message: string;
+		/** Endpoint-specific extras: upgrade_url, dns_records, retryable, ... */
+		[key: string]: unknown;
 	};
+}
+
+// ---------------------------------------------------------------------------
+// Transactional emails (POST /emails)
+// ---------------------------------------------------------------------------
+
+export interface SendEmailParams {
+	/** Sending mailbox address. Optional with a mailbox-scoped key (defaults to its mailbox). */
+	from?: string;
+	to: string;
+	subject: string;
+	html?: string;
+	text?: string;
+	reply_to?: string;
+	/** Free-form tag, filterable (stored as source_tag), e.g. "auth.verification". */
+	tag?: string;
+	/** User-controlled key-values, passed to Postmark and echoed in its webhooks. */
+	metadata?: Record<string, string>;
+}
+
+export interface SendEmailOptions {
+	/** Repeated key within 24h returns the original send instead of sending twice. */
+	idempotencyKey?: string;
+}
+
+export interface EmailResult {
+	id: string;
+	status: string;
+	from: string;
+	to: string;
+	subject: string | null;
+	provider_message_id: string | null;
+	created_at: string | null;
 }

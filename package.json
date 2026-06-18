@@ -1,6 +1,6 @@
 {
   "name": "tinysend",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Official tinysend SDK — email platform API client",
   "type": "module",
   "main": "dist/index.js",
@@ -9,6 +9,10 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./better-auth": {
+      "import": "./dist/better-auth/index.js",
+      "types": "./dist/better-auth/index.d.ts"
     }
   },
   "files": [
@@ -28,7 +32,9 @@
     "newsletter",
     "api",
     "sdk",
-    "mailbox"
+    "mailbox",
+    "transactional",
+    "better-auth"
   ],
   "author": "System Operator LLC",
   "license": "MIT",
