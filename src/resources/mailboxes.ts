@@ -4,31 +4,12 @@ import type {
 	MailboxDetail,
 	CreateMailboxParams,
 	UpdateMailboxParams,
-	HandlerDetail,
-	CreateHandlerParams,
-	UpdateHandlerParams,
 	MailboxEmailSummary,
 	MailboxEmailDetail,
 	CreateMailboxEmailParams,
 	UpdateMailboxEmailParams,
 	ListMailboxEmailsQuery,
 } from '../types.js';
-
-export class MailboxHandlers {
-	constructor(private readonly client: ApiClient) {}
-
-	create(mailboxId: string, params: CreateHandlerParams): Promise<HandlerDetail> {
-		return this.client.post(`/mailboxes/${mailboxId}/handlers`, params);
-	}
-
-	update(mailboxId: string, handlerId: string, params: UpdateHandlerParams): Promise<HandlerDetail> {
-		return this.client.patch(`/mailboxes/${mailboxId}/handlers/${handlerId}`, params);
-	}
-
-	delete(mailboxId: string, handlerId: string): Promise<void> {
-		return this.client.delete(`/mailboxes/${mailboxId}/handlers/${handlerId}`);
-	}
-}
 
 export class MailboxEmails {
 	constructor(private readonly client: ApiClient) {}
@@ -52,11 +33,9 @@ export class MailboxEmails {
 }
 
 export class Mailboxes {
-	readonly handlers: MailboxHandlers;
 	readonly emails: MailboxEmails;
 
 	constructor(private readonly client: ApiClient) {
-		this.handlers = new MailboxHandlers(client);
 		this.emails = new MailboxEmails(client);
 	}
 
