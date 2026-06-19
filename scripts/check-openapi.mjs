@@ -19,6 +19,8 @@ const SKIP = new Set([
 	'GET /lists/{listId}/stats', // alias of GET /stats/{listId}
 	'POST /sdk/feedback', // TinysendKit (native apps, ts_pub_ keys) — not this secret-key SDK's surface
 	'POST /sdk/subscribe',
+	'GET /tools/deliverability', // standalone utility endpoints, not part of the typed client surface
+	'GET /tools/disposable',
 ]);
 
 const srcDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'src');
