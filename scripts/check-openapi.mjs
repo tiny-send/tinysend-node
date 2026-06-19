@@ -21,6 +21,7 @@ const SKIP = new Set([
 	'POST /sdk/subscribe',
 	'GET /tools/deliverability', // standalone utility endpoints, not part of the typed client surface
 	'GET /tools/disposable',
+	'GET /tools/blacklist',
 ]);
 
 const srcDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'src');
