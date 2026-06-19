@@ -84,6 +84,14 @@ export interface CreateSubscriberParams {
 	email: string;
 	name?: string;
 	verified?: boolean;
+	/** Person-level labels merged onto the contact (unioned). Render in Apple Contacts as CATEGORIES. */
+	tags?: string[];
+	/** Arbitrary per-person key/values, shallow-merged onto the contact. */
+	metadata?: Record<string, unknown>;
+	/** Company — written to the contact. */
+	org?: string;
+	/** Role/title — written to the contact. */
+	job_title?: string;
 }
 
 export interface UpdateSubscriberParams {
