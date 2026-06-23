@@ -9,6 +9,7 @@ import type {
 	CreateMailboxEmailParams,
 	UpdateMailboxEmailParams,
 	ListMailboxEmailsQuery,
+	SendEmailOptions,
 } from '../types.js';
 
 export class MailboxEmails {
@@ -22,8 +23,20 @@ export class MailboxEmails {
 		return this.client.get(`/mailboxes/${mailboxId}/emails/${emailId}`);
 	}
 
-	create(mailboxId: string, params: CreateMailboxEmailParams): Promise<MailboxEmailDetail> {
-		return this.client.post(`/mailboxes/${mailboxId}/emails`, params);
+	/**
+	 * Send an outbound email from the mailbox. Pass `idempotencyKey` to make
+	 * retries safe: a repeated key on the same mailbox returns the original send.
+	 */
+	create(
+		mailboxId: string,
+		params: CreateMailboxEmailParams,
+		options?: SendEmailOptions,
+	): Promise<MailboxEmailDetail> {
+		return this.client.post(
+			`/mailboxes/${mailboxId}/emails`,
+			params,
+			options?.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : undefined,
+		);
 	}
 
 	/** Update email status (read/archived). */

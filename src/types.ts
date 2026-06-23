@@ -307,14 +307,20 @@ export interface UpdateHandlerParams {
 	status?: string;
 }
 
+/** An email label/channel — Resend-shaped {name, value}. */
+export interface EmailTag {
+	name: string;
+	value: string;
+}
+
 export interface MailboxEmailSummary {
 	id: string;
 	direction: string;
 	from_address: string;
 	to_address: string;
-	subject: string;
+	subject: string | null;
 	status: string;
-	source_tag: string | null;
+	tags: EmailTag[] | null;
 	created_at: string;
 }
 
@@ -323,14 +329,17 @@ export interface MailboxEmailDetail {
 	direction: string;
 	from_address: string;
 	to_address: string;
-	subject: string;
+	subject: string | null;
 	message_id: string | null;
 	in_reply_to: string | null;
-	r2_key: string | null;
+	/** Plain-text body, resolved from storage. */
+	text_body: string | null;
+	/** HTML body, resolved from storage. */
+	html_body: string | null;
 	status: string;
 	handler_results: unknown;
 	extracted_data: unknown;
-	source_tag: string | null;
+	tags: EmailTag[] | null;
 	contact_id: string | null;
 	created_at: string;
 }
@@ -342,8 +351,10 @@ export interface CreateMailboxEmailParams {
 	text_body: string;
 	/** Optional HTML body. */
 	html_body?: string;
+	/** RFC Message-ID of the email being replied to (threads the reply). */
 	in_reply_to?: string;
-	r2_key?: string;
+	/** The email's labels/channels. Use name 'channel' for provenance, e.g. { name: 'channel', value: 'herdr' }. */
+	tags?: EmailTag[];
 }
 
 export interface UpdateMailboxEmailParams {
@@ -353,7 +364,9 @@ export interface UpdateMailboxEmailParams {
 export interface ListMailboxEmailsQuery {
 	direction?: string;
 	status?: string;
-	source_tag?: string;
+	/** Filter by a tag name/value pair (both required to match). */
+	tag_name?: string;
+	tag_value?: string;
 	cursor?: string;
 	limit?: number;
 }
